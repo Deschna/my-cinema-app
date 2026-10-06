@@ -20,7 +20,9 @@ All endpoints receive and send data in JSON format
 ## Getting Started
 - Clone this repository: `git clone https://github.com/Deschna/my-cinema-app.git`
 - Replace `#MySQLProperties` values in `src/main/resources/db.properties` with suitable for your database
-- Build the project using Maven (write `mvn clean package` command in your terminal)
+- Run the complete build and test gate with `mvn verify`
+- Read individual test results in `target/surefire-reports`
+- Find the packaged application at `target/my-cinema-app-1.0-SNAPSHOT.war`
 - Deploy the WAR file to a servlet container (Tomcat for example)
 - Navigate to http://localhost:8080 in your browser
 ## Used Technologies
