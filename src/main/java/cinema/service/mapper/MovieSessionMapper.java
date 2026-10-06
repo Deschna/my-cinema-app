@@ -1,10 +1,10 @@
 package cinema.service.mapper;
 
-import cinema.service.CinemaHallService;
-import cinema.service.MovieService;
 import cinema.dto.request.MovieSessionRequestDto;
 import cinema.dto.response.MovieSessionResponseDto;
 import cinema.model.MovieSession;
+import cinema.service.CinemaHallService;
+import cinema.service.MovieService;
 import org.springframework.stereotype.Component;
 
 @Component
