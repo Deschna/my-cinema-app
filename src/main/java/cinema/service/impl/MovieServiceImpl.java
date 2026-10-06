@@ -1,9 +1,9 @@
 package cinema.service.impl;
 
 import cinema.dao.MovieDao;
+import cinema.model.Movie;
 import cinema.service.MovieService;
 import java.util.List;
-import cinema.model.Movie;
 import org.springframework.stereotype.Service;
 
 @Service

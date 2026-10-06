@@ -1,9 +1,9 @@
 package cinema.service.impl;
 
 import cinema.dao.UserDao;
+import cinema.model.User;
 import cinema.service.UserService;
 import java.util.Optional;
-import cinema.model.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

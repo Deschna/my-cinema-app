@@ -1,11 +1,11 @@
 package cinema.dao.impl;
 
-import java.time.LocalDate;
-import java.util.List;
 import cinema.dao.AbstractDao;
 import cinema.dao.MovieSessionDao;
 import cinema.exception.DataProcessingException;
 import cinema.model.MovieSession;
+import java.time.LocalDate;
+import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;

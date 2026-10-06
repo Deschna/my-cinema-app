@@ -1,8 +1,8 @@
 package cinema.security;
 
-import java.util.Optional;
 import cinema.model.User;
 import cinema.service.UserService;
+import java.util.Optional;
 import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

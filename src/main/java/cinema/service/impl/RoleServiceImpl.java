@@ -1,9 +1,9 @@
 package cinema.service.impl;
 
 import cinema.dao.RoleDao;
+import cinema.model.Role;
 import cinema.service.RoleService;
 import java.util.NoSuchElementException;
-import cinema.model.Role;
 import org.springframework.stereotype.Service;
 
 @Service
