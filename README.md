@@ -29,9 +29,9 @@ All endpoints receive and send data in JSON format
 - Java `17.0.6`
 - Apache Maven `3.8.7`
 - Apache Tomcat `9.0.73`
-- MySQL `8.0.22`
-- Spring `5.3.20`
-- Spring Security `5.6.10`
-- Hibernate `5.6.14.Final`
+- MySQL Community Server `9.7.2 LTS`
+- Spring `5.3.39`
+- Spring Security `5.8.16`
+- Hibernate `5.6.15.Final`
 ## Authors
 [Déschna (Ditkovskyi Pasha)](https://github.com/Deschna)
