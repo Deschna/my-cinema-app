@@ -151,6 +151,7 @@
                 <configuration>
                     <configLocation>${maven.checkstyle.plugin.configLocation}</configLocation>
                     <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
                     <linkXRef>false</linkXRef>
