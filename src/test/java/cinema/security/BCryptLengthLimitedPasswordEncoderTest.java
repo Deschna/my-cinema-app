@@ -71,7 +71,8 @@ class BCryptLengthLimitedPasswordEncoderTest {
 
     @Test
     void rootConfigExposesLengthLimitedPasswordEncoder() {
-        PasswordEncoder configuredEncoder = new RootConfig(new StandardEnvironment()).getEncoder();
+        PasswordEncoder configuredEncoder = new RootConfig(new StandardEnvironment())
+                .passwordEncoder();
 
         assertInstanceOf(BCryptLengthLimitedPasswordEncoder.class, configuredEncoder);
     }
