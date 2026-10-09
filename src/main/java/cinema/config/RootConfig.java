@@ -6,6 +6,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -14,11 +15,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @PropertySource("classpath:db.properties")
-@ComponentScan(basePackages = "cinema")
-public class AppConfig {
+@ComponentScan(basePackages = {
+        "cinema.dao",
+        "cinema.security",
+        "cinema.service"
+})
+@Import(DataInitializer.class)
+public class RootConfig {
     private final Environment environment;
 
-    public AppConfig(Environment environment) {
+    public RootConfig(Environment environment) {
         this.environment = environment;
     }
 
