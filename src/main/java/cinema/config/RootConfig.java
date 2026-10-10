@@ -14,7 +14,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-@PropertySource("classpath:db.properties")
+@PropertySource("file:${CINEMA_DB_PROPERTIES_FILE:config/db.properties}")
 @ComponentScan(basePackages = {
         "cinema.dao",
         "cinema.security",
@@ -31,10 +31,10 @@ public class RootConfig {
     @Bean
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(environment.getProperty("db.driver"));
-        dataSource.setUrl(environment.getProperty("db.url"));
-        dataSource.setUsername(environment.getProperty("db.user"));
-        dataSource.setPassword(environment.getProperty("db.password"));
+        dataSource.setDriverClassName(requireNonBlankProperty("db.driver"));
+        dataSource.setUrl(requireNonBlankProperty("db.url"));
+        dataSource.setUsername(requireNonBlankProperty("db.user"));
+        dataSource.setPassword(requireNonBlankProperty("db.password"));
         return dataSource;
     }
 
@@ -44,9 +44,9 @@ public class RootConfig {
         factoryBean.setDataSource(dataSource());
 
         Properties properties = new Properties();
-        properties.put("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
-        properties.put("hibernate.dialect", environment.getProperty("hibernate.dialect"));
-        properties.put("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
+        properties.put("hibernate.show_sql", requireNonBlankProperty("hibernate.show_sql"));
+        properties.put("hibernate.dialect", requireNonBlankProperty("hibernate.dialect"));
+        properties.put("hibernate.hbm2ddl.auto", requireNonBlankProperty("hibernate.hbm2ddl.auto"));
 
         factoryBean.setHibernateProperties(properties);
         factoryBean.setPackagesToScan("cinema.model");
@@ -56,5 +56,14 @@ public class RootConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptLengthLimitedPasswordEncoder();
+    }
+
+    private String requireNonBlankProperty(String propertyName) {
+        String propertyValue = environment.getProperty(propertyName);
+        if (propertyValue == null || propertyValue.isBlank()) {
+            throw new IllegalStateException("Required configuration property '"
+                    + propertyName + "' is missing or blank");
+        }
+        return propertyValue;
     }
 }

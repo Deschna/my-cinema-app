@@ -19,12 +19,15 @@ Welcome to My Cinema App! This project is an imitation of a cinema application.
 All endpoints receive and send data in JSON format
 ## Getting Started
 - Clone this repository: `git clone https://github.com/Deschna/my-cinema-app.git`
-- Replace `#MySQLProperties` values in `src/main/resources/db.properties` with suitable for your database
+- Create a MySQL database and configure `config/db.properties`; to use another file, set
+  `CINEMA_DB_PROPERTIES_FILE` to its absolute path
+- `hibernate.hbm2ddl.auto=create` recreates tables at startup and may delete existing data
 - Run the complete build and test gate with `mvn verify`
 - Read individual test results in `target/surefire-reports`
 - Find the packaged application at `target/my-cinema-app-1.0-SNAPSHOT.war`
-- Deploy the WAR file to a servlet container (Tomcat for example)
-- Navigate to http://localhost:8080 in your browser
+- Deploy the WAR file to a Servlet 4-compatible container, such as Tomcat 9
+- With the default Tomcat settings and generated WAR name, open
+  `http://localhost:8080/my-cinema-app-1.0-SNAPSHOT`
 ## Used Technologies
 - Java `17.0.6`
 - Apache Maven `3.8.7`
