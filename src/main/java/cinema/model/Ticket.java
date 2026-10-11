@@ -14,11 +14,11 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "movie_session_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "movie_session_id", nullable = false)
     private MovieSession movieSession;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Long getId() {

@@ -17,12 +17,12 @@ public class ShoppingCart {
     private Long id;
     @OneToMany
     @JoinTable(name = "shopping_carts_tickets",
-            joinColumns = @JoinColumn(name = "shopping_cart_id"),
-            inverseJoinColumns = @JoinColumn(name = "ticket_id"))
+            joinColumns = @JoinColumn(name = "shopping_cart_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "ticket_id", nullable = false, unique = true))
     private List<Ticket> tickets;
     @MapsId
-    @OneToOne
-    @JoinColumn(name = "id")
+    @OneToOne(optional = false)
+    @JoinColumn(name = "id", nullable = false)
     private User user;
 
     public Long getId() {
