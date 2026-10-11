@@ -1,6 +1,7 @@
 # 🎥 My Cinema App 🎬
 ## Description
 Welcome to My Cinema App! This project is an imitation of a cinema application.
+This project is intended for local demonstration only.
 <br>With this app, you can easily manage various movie-related tasks as a user or administrator using the following endpoints:
 - `POST: /register` - for all unauthorized users, to register as a new user (by default, have a user role after registration)
 - `GET: /cinema-halls`  - for USER and ADMIN, to get all available cinema halls
@@ -20,8 +21,10 @@ All endpoints receive and send data in JSON format
 ## Getting Started
 - Clone this repository: `git clone https://github.com/Deschna/my-cinema-app.git`
 - Create a MySQL database and configure `config/db.properties`; to use another file, set
-  `CINEMA_DB_PROPERTIES_FILE` to its absolute path
-- `hibernate.hbm2ddl.auto=create` recreates tables at startup and may delete existing data
+  `CINEMA_DB_PROPERTIES_FILE` to its absolute path. By default, every startup resets application
+  data and initializes the USER and ADMIN roles and the local administrator `admin@i.ua` /
+  `admin123`. To preserve data, change `hibernate.hbm2ddl.auto` from `create` to `validate` after
+  the first successful startup
 - Run the complete build and test gate with `mvn verify`
 - Read individual test results in `target/surefire-reports`
 - Find the packaged application at `target/my-cinema-app-1.0-SNAPSHOT.war`
