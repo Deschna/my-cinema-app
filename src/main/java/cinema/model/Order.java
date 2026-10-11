@@ -21,13 +21,13 @@ public class Order {
     private Long id;
     @OneToMany
     @JoinTable(name = "orders_tickets",
-            joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "ticket_id"))
+            joinColumns = @JoinColumn(name = "order_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "ticket_id", nullable = false, unique = true))
     private List<Ticket> tickets;
-    @Column(name = "order_time")
+    @Column(name = "order_time", nullable = false)
     private LocalDateTime orderTime;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Long getId() {

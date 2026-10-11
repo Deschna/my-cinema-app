@@ -16,13 +16,13 @@ public class MovieSession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "movie_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
-    @ManyToOne
-    @JoinColumn(name = "cinema_hall_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "cinema_hall_id", nullable = false)
     private CinemaHall cinemaHall;
-    @Column(name = "show_time")
+    @Column(name = "show_time", nullable = false)
     private LocalDateTime showTime;
 
     public Long getId() {
