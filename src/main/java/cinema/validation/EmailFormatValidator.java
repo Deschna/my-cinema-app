@@ -1,9 +1,9 @@
-package cinema.lib;
+package cinema.validation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
+public class EmailFormatValidator implements ConstraintValidator<EmailFormat, String> {
     private static final String EMAIL_VALIDATION_REGEX = "^(.+)@(.+)$";
 
     @Override

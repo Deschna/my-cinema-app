@@ -1,27 +1,27 @@
-package cinema.lib;
+package cinema.validation;
 
 import java.util.Objects;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.springframework.beans.BeanWrapperImpl;
 
-public class FieldsValueMatchValidator
-        implements ConstraintValidator<FieldsValueMatch, Object> {
+public class FieldsMatchValidator
+        implements ConstraintValidator<FieldsMatch, Object> {
     private String field;
-    private String fieldMatch;
+    private String matchingField;
 
-    public void initialize(FieldsValueMatch constraintAnnotation) {
+    public void initialize(FieldsMatch constraintAnnotation) {
         this.field = constraintAnnotation.field();
-        this.fieldMatch = constraintAnnotation.fieldMatch();
+        this.matchingField = constraintAnnotation.matchingField();
     }
 
     public boolean isValid(Object value,
                            ConstraintValidatorContext context) {
         Object fieldValue = new BeanWrapperImpl(value)
                 .getPropertyValue(field);
-        Object fieldMatchValue = new BeanWrapperImpl(value)
-                .getPropertyValue(fieldMatch);
+        Object matchingFieldValue = new BeanWrapperImpl(value)
+                .getPropertyValue(matchingField);
 
-        return Objects.equals(fieldValue, fieldMatchValue);
+        return Objects.equals(fieldValue, matchingFieldValue);
     }
 }

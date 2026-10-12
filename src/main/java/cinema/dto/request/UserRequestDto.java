@@ -1,16 +1,16 @@
 package cinema.dto.request;
 
-import cinema.lib.FieldsValueMatch;
-import cinema.lib.ValidEmail;
+import cinema.validation.EmailFormat;
+import cinema.validation.FieldsMatch;
 import javax.validation.constraints.Size;
 
-@FieldsValueMatch(
+@FieldsMatch(
         field = "password",
-        fieldMatch = "repeatPassword",
+        matchingField = "repeatPassword",
         message = "Passwords do not match!"
 )
 public class UserRequestDto {
-    @ValidEmail
+    @EmailFormat
     private String email;
     @Size(min = 8, max = 40)
     private String password;
