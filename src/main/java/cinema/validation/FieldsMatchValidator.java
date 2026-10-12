@@ -5,23 +5,35 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.springframework.beans.BeanWrapperImpl;
 
-public class FieldsMatchValidator
-        implements ConstraintValidator<FieldsMatch, Object> {
+public class FieldsMatchValidator implements ConstraintValidator<FieldsMatch, Object> {
     private String field;
     private String matchingField;
 
+    @Override
     public void initialize(FieldsMatch constraintAnnotation) {
         this.field = constraintAnnotation.field();
         this.matchingField = constraintAnnotation.matchingField();
     }
 
-    public boolean isValid(Object value,
-                           ConstraintValidatorContext context) {
-        Object fieldValue = new BeanWrapperImpl(value)
-                .getPropertyValue(field);
-        Object matchingFieldValue = new BeanWrapperImpl(value)
-                .getPropertyValue(matchingField);
+    @Override
+    public boolean isValid(Object value, ConstraintValidatorContext context) {
+        if (value == null) {
+            return true;
+        }
 
-        return Objects.equals(fieldValue, matchingFieldValue);
+        BeanWrapperImpl beanWrapper = new BeanWrapperImpl(value);
+        Object fieldValue = beanWrapper.getPropertyValue(field);
+        Object matchingFieldValue = beanWrapper.getPropertyValue(matchingField);
+
+        if (Objects.equals(fieldValue, matchingFieldValue)) {
+            return true;
+        }
+
+        context.disableDefaultConstraintViolation();
+        context.buildConstraintViolationWithTemplate(
+                        context.getDefaultConstraintMessageTemplate())
+                .addPropertyNode(matchingField)
+                .addConstraintViolation();
+        return false;
     }
 }
