@@ -1,6 +1,6 @@
 package cinema.controller;
 
-import cinema.dto.request.UserRequestDto;
+import cinema.dto.request.UserRegistrationRequestDto;
 import cinema.dto.response.UserResponseDto;
 import cinema.model.User;
 import cinema.service.AuthenticationService;
@@ -22,7 +22,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public UserResponseDto register(@RequestBody @Valid UserRequestDto requestDto) {
+    public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto requestDto) {
         User user = authService.register(requestDto.getEmail(), requestDto.getPassword());
         return userDtoResponseMapper.mapToDto(user);
     }
