@@ -1,14 +1,16 @@
-package cinema.controller;
+package cinema.controller.validation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import cinema.config.WebConfig;
+import cinema.controller.AuthenticationController;
+import cinema.controller.GlobalExceptionHandler;
 import cinema.dto.response.UserResponseDto;
 import cinema.model.User;
 import cinema.service.AuthenticationService;
 import cinema.service.mapper.ResponseDtoMapper;
-import org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -63,14 +65,13 @@ class RequestBodyValidationMvcTest {
             return responseDto;
         };
         return MockMvcBuilders.standaloneSetup(new AuthenticationController(service, mapper))
-                .setControllerAdvice(new CustomGlobalExceptionHandler())
+                .setControllerAdvice(new GlobalExceptionHandler())
                 .setValidator(VALIDATOR)
                 .build();
     }
 
     private static LocalValidatorFactoryBean createValidator() {
-        LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
-        validator.setMessageInterpolator(new ParameterMessageInterpolator());
+        LocalValidatorFactoryBean validator = new WebConfig().validator();
         validator.afterPropertiesSet();
         return validator;
     }
