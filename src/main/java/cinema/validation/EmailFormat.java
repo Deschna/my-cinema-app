@@ -17,7 +17,7 @@ import javax.validation.Payload;
  */
 @Documented
 @Constraint(validatedBy = EmailFormatValidator.class)
-@Target({ElementType.METHOD, ElementType.FIELD})
+@Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EmailFormat {
     String message() default "must have a valid email format";
