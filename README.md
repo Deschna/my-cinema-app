@@ -17,7 +17,9 @@ This project is intended for local demonstration only.
 - `GET: /orders` - for USER, to get order history by user
 - `GET: /users/by-email` - for ADMIN, to find a user by email
 
-All endpoints receive and send data in JSON format
+REST controller request and response bodies use JSON. MVC error bodies share
+a consistent format without exposing internal exception details.
+
 ## Getting Started
 - Clone this repository: `git clone https://github.com/Deschna/my-cinema-app.git`
 - Create a MySQL database and configure `config/db.properties`; to use another file, set

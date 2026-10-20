@@ -1,12 +1,10 @@
-package cinema.controller.validation;
+package cinema.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import cinema.config.WebConfig;
-import cinema.controller.AuthenticationController;
-import cinema.controller.GlobalExceptionHandler;
 import cinema.dto.response.UserResponseDto;
 import cinema.model.User;
 import cinema.service.AuthenticationService;
@@ -15,13 +13,15 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 /**
- * Verifies that Spring MVC validates deserialized request bodies before invoking services.
+ * Verifies request-body validation and response content negotiation on registration.
+ * Rejected requests must not invoke the authentication service.
  */
-class RequestBodyValidationMvcTest {
+class AuthenticationControllerMvcTest {
     private static final LocalValidatorFactoryBean VALIDATOR = createValidator();
 
     @Test
@@ -35,6 +35,24 @@ class RequestBodyValidationMvcTest {
                                 + "\"repeatPassword\":\"password\"}"))
                 .andExpect(status().isBadRequest());
 
+        assertEquals(0, service.callCount());
+    }
+
+    @Test
+    void rejectsUnacceptableResponseTypeBeforeCallingService() throws Exception {
+        CountingAuthenticationService service = new CountingAuthenticationService();
+        MockMvc mockMvc = registrationMockMvc(service);
+
+        MvcResult result = mockMvc.perform(post("/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_XML)
+                        .content("{\"email\":\"user@example.com\","
+                                + "\"password\":\"password\","
+                                + "\"repeatPassword\":\"password\"}"))
+                .andExpect(status().isNotAcceptable())
+                .andReturn();
+
+        assertEquals(0, result.getResponse().getContentAsByteArray().length);
         assertEquals(0, service.callCount());
     }
 

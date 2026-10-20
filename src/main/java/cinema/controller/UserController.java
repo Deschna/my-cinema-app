@@ -6,6 +6,7 @@ import cinema.service.UserService;
 import cinema.service.mapper.ResponseDtoMapper;
 import cinema.validation.EmailFormat;
 import javax.validation.constraints.NotBlank;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
 @Validated
 public class UserController {
     private final UserService userService;

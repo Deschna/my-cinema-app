@@ -9,6 +9,7 @@ import cinema.service.ShoppingCartService;
 import cinema.service.UserService;
 import cinema.service.mapper.ResponseDtoMapper;
 import java.util.List;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping(value = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderController {
     private final ShoppingCartService shoppingCartService;
     private final OrderService orderService;
