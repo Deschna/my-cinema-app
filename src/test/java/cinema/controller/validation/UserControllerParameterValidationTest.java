@@ -1,6 +1,7 @@
 package cinema.controller.validation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -9,13 +10,18 @@ import cinema.dto.response.UserResponseDto;
 import cinema.model.User;
 import cinema.service.UserService;
 import cinema.service.mapper.ResponseDtoMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 class UserControllerParameterValidationTest {
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final RequestParameterValidationFixture VALIDATION =
             new RequestParameterValidationFixture();
 
@@ -28,8 +34,20 @@ class UserControllerParameterValidationTest {
         )) {
             MockMvc mockMvc = VALIDATION.mockMvc(context.getBean(UserController.class));
 
-            mockMvc.perform(get("/users/by-email").param("email", " "))
-                    .andExpect(status().isBadRequest());
+            MvcResult invalidEmail = mockMvc.perform(
+                            get("/users/by-email").param("email", " "))
+                    .andExpect(status().isBadRequest())
+                    .andReturn();
+            JsonNode error = OBJECT_MAPPER.readTree(
+                    invalidEmail.getResponse().getContentAsByteArray()
+            );
+            assertEquals("VALIDATION_ERROR", error.path("code").asText());
+            assertEquals("/users/by-email", error.path("path").asText());
+            JsonNode emailErrors = error.path("fieldErrors").path("email");
+            assertEquals(2, emailErrors.size());
+            assertTrue(StreamSupport.stream(emailErrors.spliterator(), false)
+                    .anyMatch(errorNode -> "must have a valid email format"
+                            .equals(errorNode.asText())));
             mockMvc.perform(get("/users/by-email").param("email", " user@example.com"))
                     .andExpect(status().isBadRequest());
             assertEquals(0, service.findCallCount());

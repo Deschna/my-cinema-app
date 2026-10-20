@@ -9,6 +9,7 @@ import cinema.service.ShoppingCartService;
 import cinema.service.UserService;
 import cinema.service.mapper.ResponseDtoMapper;
 import javax.validation.constraints.Positive;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/shopping-carts")
+@RequestMapping(value = "/shopping-carts", produces = MediaType.APPLICATION_JSON_VALUE)
 @Validated
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;

@@ -1,0 +1,11 @@
+package cinema.dto.response;
+
+public enum ApiErrorCode {
+    VALIDATION_ERROR,
+    INVALID_REQUEST_PARAMETER,
+    MALFORMED_REQUEST_BODY,
+    INVALID_REQUEST,
+    METHOD_NOT_ALLOWED,
+    UNSUPPORTED_MEDIA_TYPE,
+    INTERNAL_ERROR
+}

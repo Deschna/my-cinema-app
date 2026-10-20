@@ -13,6 +13,8 @@ import cinema.model.MovieSession;
 import cinema.service.MovieSessionService;
 import cinema.service.mapper.RequestDtoMapper;
 import cinema.service.mapper.ResponseDtoMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.AfterAll;
@@ -20,8 +22,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 class MovieSessionControllerParameterValidationTest {
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final RequestParameterValidationFixture VALIDATION =
             new RequestParameterValidationFixture();
 
@@ -47,6 +51,39 @@ class MovieSessionControllerParameterValidationTest {
                             .param("movieId", "1")
                             .param("date", "13.10.2026"))
                     .andExpect(status().isOk());
+            assertEquals(1, service.findCallCount());
+
+            MvcResult invalidDate = mockMvc.perform(get("/movie-sessions/available")
+                            .param("movieId", "1")
+                            .param("date", "not-a-date"))
+                    .andExpect(status().isBadRequest())
+                    .andReturn();
+            JsonNode error = OBJECT_MAPPER.readTree(
+                    invalidDate.getResponse().getContentAsByteArray()
+            );
+            assertEquals("INVALID_REQUEST_PARAMETER", error.path("code").asText());
+            assertEquals("/movie-sessions/available", error.path("path").asText());
+            assertEquals(
+                    "Value has an invalid type or format",
+                    error.path("fieldErrors").path("date").get(0).asText()
+            );
+            assertEquals(1, service.findCallCount());
+
+            MvcResult missingDate = mockMvc.perform(get("/movie-sessions/available")
+                            .param("movieId", "1"))
+                    .andExpect(status().isBadRequest())
+                    .andReturn();
+            JsonNode missingParameterError = OBJECT_MAPPER.readTree(
+                    missingDate.getResponse().getContentAsByteArray()
+            );
+            assertEquals(
+                    "INVALID_REQUEST_PARAMETER",
+                    missingParameterError.path("code").asText()
+            );
+            assertEquals(
+                    "Required request parameter is missing",
+                    missingParameterError.path("fieldErrors").path("date").get(0).asText()
+            );
             assertEquals(1, service.findCallCount());
 
             mockMvc.perform(put("/movie-sessions/0")
