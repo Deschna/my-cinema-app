@@ -1,6 +1,7 @@
 package cinema.service.impl;
 
 import cinema.dao.UserDao;
+import cinema.exception.ResourceNotFoundException;
 import cinema.model.User;
 import cinema.service.UserService;
 import java.util.Optional;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User get(Long id) {
         return userDao.get(id).orElseThrow(
-                () -> new RuntimeException("User with id " + id + " not found"));
+                () -> new ResourceNotFoundException("User not found by id: " + id));
     }
 
     @Override

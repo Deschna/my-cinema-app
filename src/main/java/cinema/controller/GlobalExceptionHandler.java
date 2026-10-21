@@ -2,6 +2,7 @@ package cinema.controller;
 
 import cinema.dto.response.ApiErrorCode;
 import cinema.dto.response.ApiErrorResponse;
+import cinema.exception.ResourceNotFoundException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -145,6 +146,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 fieldErrors
         );
         return new ResponseEntity<>(body, headers, status);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleResourceNotFound(
+            ResourceNotFoundException ex, WebRequest request) {
+        if (ex.getSuppressed().length > 0) {
+            logger.error("Error during cleanup operation for request " + requestPath(request), ex);
+        }
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ApiErrorResponse body = createErrorResponse(
+                status,
+                ApiErrorCode.RESOURCE_NOT_FOUND,
+                "Requested resource was not found",
+                request,
+                Map.of()
+        );
+        return new ResponseEntity<>(body, status);
     }
 
     @ExceptionHandler(Exception.class)

@@ -2,6 +2,7 @@ package cinema.service.impl;
 
 import cinema.dao.ShoppingCartDao;
 import cinema.dao.TicketDao;
+import cinema.exception.ResourceNotFoundException;
 import cinema.model.MovieSession;
 import cinema.model.ShoppingCart;
 import cinema.model.Ticket;
@@ -27,7 +28,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart shoppingCart = shoppingCartDao.getByUser(user);
         ticketDao.add(ticket);
         shoppingCart.getTickets().add(ticket);
-        shoppingCartDao.update(shoppingCart);
+        updateShoppingCart(shoppingCart);
     }
 
     @Override
@@ -45,6 +46,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public void clear(ShoppingCart shoppingCart) {
         shoppingCart.setTickets(null);
-        shoppingCartDao.update(shoppingCart);
+        updateShoppingCart(shoppingCart);
+    }
+
+    private void updateShoppingCart(ShoppingCart shoppingCart) {
+        try {
+            shoppingCartDao.update(shoppingCart);
+        } catch (ResourceNotFoundException e) {
+            throw new IllegalStateException(
+                    "Error during update operation for ShoppingCart, id: "
+                            + shoppingCart.getId() + "; required shopping cart was not found",
+                    e
+            );
+        }
     }
 }
