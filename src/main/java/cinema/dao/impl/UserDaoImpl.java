@@ -24,7 +24,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
             findByEmail.setParameter("email", email);
             return findByEmail.uniqueResultOptional();
         } catch (Exception e) {
-            throw new DataProcessingException("User with email " + email + " not found", e);
+            throw new DataProcessingException("Error during lookup operation for User by email", e);
         }
     }
 }

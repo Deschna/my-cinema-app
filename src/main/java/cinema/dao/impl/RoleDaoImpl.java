@@ -22,7 +22,8 @@ public class RoleDaoImpl extends AbstractDao<Role> implements RoleDao {
                     .setParameter("roleName", roleName)
                     .uniqueResultOptional();
         } catch (Exception e) {
-            throw new DataProcessingException("Can't found role by name " + roleName, e);
+            throw new DataProcessingException(
+                    "Error during lookup operation for Role, name: " + roleName, e);
         }
     }
 }

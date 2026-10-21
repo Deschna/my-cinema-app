@@ -1,6 +1,7 @@
 package cinema.service.impl;
 
 import cinema.dao.MovieDao;
+import cinema.exception.ResourceNotFoundException;
 import cinema.model.Movie;
 import cinema.service.MovieService;
 import java.util.List;
@@ -22,7 +23,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public Movie get(Long id) {
         return movieDao.get(id).orElseThrow(
-                () -> new RuntimeException("Can't get movie by id " + id));
+                () -> new ResourceNotFoundException("Movie not found by id: " + id));
     }
 
     @Override
