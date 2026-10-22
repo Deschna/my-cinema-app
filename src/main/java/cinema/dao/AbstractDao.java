@@ -2,6 +2,7 @@ package cinema.dao;
 
 import cinema.exception.DataProcessingException;
 import cinema.exception.ResourceNotFoundException;
+import cinema.exception.ResourceReferencedException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -68,16 +69,26 @@ public abstract class AbstractDao<T> {
     }
 
     public void delete(Long id) {
-        executeInTransaction(session -> {
-            T entity = session.get(clazz, id, LockMode.PESSIMISTIC_WRITE);
-            if (entity == null) {
-                throw new ResourceNotFoundException(
-                        clazz.getSimpleName() + " not found by id: " + id
-                );
+        String errorMessage = "Error during delete operation for "
+                + clazz.getSimpleName() + ", id: " + id;
+        try {
+            executeInTransaction(session -> {
+                T entity = session.get(clazz, id, LockMode.PESSIMISTIC_WRITE);
+                if (entity == null) {
+                    throw new ResourceNotFoundException(
+                            clazz.getSimpleName() + " not found by id: " + id
+                    );
+                }
+                session.delete(entity);
+                return null;
+            }, errorMessage);
+        } catch (DataProcessingException e) {
+            if (MySqlConstraintErrors.isReferencedRow(e)) {
+                throw new ResourceReferencedException(
+                        errorMessage + "; resource is still referenced", e);
             }
-            session.delete(entity);
-            return null;
-        }, "Error during delete operation for " + clazz.getSimpleName() + ", id: " + id);
+            throw e;
+        }
     }
 
     protected <R> R executeInTransaction(Function<Session, R> operation, String errorMessage) {

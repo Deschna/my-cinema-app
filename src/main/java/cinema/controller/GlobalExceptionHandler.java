@@ -2,7 +2,9 @@ package cinema.controller;
 
 import cinema.dto.response.ApiErrorCode;
 import cinema.dto.response.ApiErrorResponse;
+import cinema.exception.DuplicateEmailException;
 import cinema.exception.ResourceNotFoundException;
+import cinema.exception.ResourceReferencedException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -151,14 +153,42 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiErrorResponse> handleResourceNotFound(
             ResourceNotFoundException ex, WebRequest request) {
-        if (ex.getSuppressed().length > 0) {
-            logger.error("Error during cleanup operation for request " + requestPath(request), ex);
-        }
+        logCleanupFailure(ex, request);
         HttpStatus status = HttpStatus.NOT_FOUND;
         ApiErrorResponse body = createErrorResponse(
                 status,
                 ApiErrorCode.RESOURCE_NOT_FOUND,
                 "Requested resource was not found",
+                request,
+                Map.of()
+        );
+        return new ResponseEntity<>(body, status);
+    }
+
+    @ExceptionHandler(DuplicateEmailException.class)
+    public ResponseEntity<ApiErrorResponse> handleDuplicateEmail(
+            DuplicateEmailException ex, WebRequest request) {
+        logCleanupFailure(ex, request);
+        HttpStatus status = HttpStatus.CONFLICT;
+        ApiErrorResponse body = createErrorResponse(
+                status,
+                ApiErrorCode.EMAIL_ALREADY_EXISTS,
+                "Email is already registered",
+                request,
+                Map.of()
+        );
+        return new ResponseEntity<>(body, status);
+    }
+
+    @ExceptionHandler(ResourceReferencedException.class)
+    public ResponseEntity<ApiErrorResponse> handleResourceReferenced(
+            ResourceReferencedException ex, WebRequest request) {
+        logCleanupFailure(ex, request);
+        HttpStatus status = HttpStatus.CONFLICT;
+        ApiErrorResponse body = createErrorResponse(
+                status,
+                ApiErrorCode.RESOURCE_REFERENCED,
+                "Requested resource is referenced by other data",
                 request,
                 Map.of()
         );
@@ -271,5 +301,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private void logUnexpectedException(Exception ex, WebRequest request) {
         logger.error("Unexpected request failure for " + requestPath(request), ex);
+    }
+
+    private void logCleanupFailure(Exception ex, WebRequest request) {
+        for (Throwable cause = ex; cause != null; cause = cause.getCause()) {
+            if (cause.getSuppressed().length > 0) {
+                logger.error("Error during cleanup operation for request "
+                        + requestPath(request), ex);
+                return;
+            }
+        }
     }
 }
