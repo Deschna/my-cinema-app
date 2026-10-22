@@ -1,64 +1,78 @@
 package cinema.config;
 
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
 import cinema.security.JsonAccessDeniedHandler;
 import cinema.security.JsonAuthenticationEntryPoint;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
+import org.springframework.security.web.SecurityFilterChain;
 
+@Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final UserDetailsService userDetailsService;
-    private final PasswordEncoder passwordEncoder;
+public class SecurityConfig {
     private final JsonAuthenticationEntryPoint authenticationEntryPoint;
     private final JsonAccessDeniedHandler accessDeniedHandler;
 
-    public SecurityConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder,
-                          JsonAuthenticationEntryPoint authenticationEntryPoint,
+    public SecurityConfig(JsonAuthenticationEntryPoint authenticationEntryPoint,
                           JsonAccessDeniedHandler accessDeniedHandler) {
-        this.userDetailsService = userDetailsService;
-        this.passwordEncoder = passwordEncoder;
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.accessDeniedHandler = accessDeniedHandler;
     }
 
-    @Autowired
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-    }
-
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .antMatchers("/register").permitAll()
-                .antMatchers(HttpMethod.GET,"/cinema-halls").hasAnyRole("ADMIN", "USER")
-                .antMatchers(HttpMethod.POST, "/cinema-halls").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET,"/movies").hasAnyRole("ADMIN", "USER")
-                .antMatchers(HttpMethod.POST, "/movies").hasRole("ADMIN")
-                .antMatchers("/movie-sessions/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/movie-sessions/available")
-                            .hasAnyRole("ADMIN", "USER")
-                .antMatchers(HttpMethod.GET, "/orders/**").hasRole("USER")
-                .antMatchers(HttpMethod.POST, "/orders/complete").hasRole("USER")
-                .antMatchers(HttpMethod.GET, "/shopping-carts/by-user").hasRole("USER")
-                .antMatchers(HttpMethod.PUT, "/shopping-carts/movie-sessions").hasRole("USER")
-                .antMatchers(HttpMethod.GET, "/users/by-email").hasRole("ADMIN")
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .permitAll()
-                .and()
-                .httpBasic()
-                .authenticationEntryPoint(authenticationEntryPoint)
-                .and()
-                .exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler)
-                .and()
-                .csrf().disable();
+    // Spring Security uses the existing UserDetailsService and PasswordEncoder beans.
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // Use explicit Ant matchers because MVC is configured in a separate child context.
+        http.authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/register")).permitAll()
+                        .requestMatchers(
+                                antMatcher(HttpMethod.GET, "/movies"),
+                                antMatcher(HttpMethod.GET, "/cinema-halls"),
+                                antMatcher(HttpMethod.GET, "/movie-sessions/available"))
+                        .hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(
+                                antMatcher(HttpMethod.HEAD, "/movies"),
+                                antMatcher(HttpMethod.HEAD, "/cinema-halls"),
+                                antMatcher(HttpMethod.HEAD, "/movie-sessions/available"))
+                        .hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(
+                                antMatcher(HttpMethod.POST, "/movies"),
+                                antMatcher(HttpMethod.POST, "/cinema-halls"),
+                                antMatcher(HttpMethod.POST, "/movie-sessions"))
+                        .hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.PUT, "/movie-sessions/{id}"))
+                        .hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.DELETE, "/movie-sessions/{id}"))
+                        .hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.GET, "/users/by-email"))
+                        .hasRole("ADMIN")
+                        .requestMatchers(antMatcher(HttpMethod.HEAD, "/users/by-email"))
+                        .hasRole("ADMIN")
+                        .requestMatchers(
+                                antMatcher(HttpMethod.GET, "/orders"),
+                                antMatcher(HttpMethod.GET, "/shopping-carts/by-user"))
+                        .hasRole("USER")
+                        .requestMatchers(
+                                antMatcher(HttpMethod.HEAD, "/orders"),
+                                antMatcher(HttpMethod.HEAD, "/shopping-carts/by-user"))
+                        .hasRole("USER")
+                        .requestMatchers(antMatcher(HttpMethod.POST, "/orders/complete"))
+                        .hasRole("USER")
+                        .requestMatchers(
+                                antMatcher(HttpMethod.PUT, "/shopping-carts/movie-sessions"))
+                        .hasRole("USER")
+                        .anyRequest().denyAll())
+                .formLogin(FormLoginConfigurer::permitAll)
+                .httpBasic(basic -> basic.authenticationEntryPoint(authenticationEntryPoint))
+                .exceptionHandling(exceptions -> exceptions
+                        .accessDeniedHandler(accessDeniedHandler))
+                .csrf(AbstractHttpConfigurer::disable);
+        return http.build();
     }
 }
