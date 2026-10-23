@@ -23,17 +23,16 @@
         <spring.version>5.3.39</spring.version>
         <spring.security.version>5.8.16</spring.security.version>
         <hibernate.version>5.6.15.Final</hibernate.version>
-        <jackson.version>2.22.3</jackson.version>
+        <jackson.version>2.22.4</jackson.version>
         <junit.jupiter.version>6.1.3</junit.jupiter.version>
     </properties>
 
     <dependencies>
         <!--
-            Spring 5.3, Spring Security 5.8 and springdoc 1.8 are the last open-source
-            release lines compatible with the project's javax stack (Servlet 4 / Tomcat 9).
+            Spring 5.3, Spring Security 5.8, springdoc 1.8 and Hibernate 5.6 are the last
+            open-source release lines compatible with the project's javax stack
+            (Servlet 4 / Tomcat 9).
             Newer release lines require migrating to Jakarta APIs and Tomcat 10+.
-            The targeted IntelliJ suppressions acknowledge known CVE warnings
-            without hiding findings for other dependencies.
         -->
         <!--suppress VulnerableLibrariesLocal -->
         <dependency>
@@ -92,6 +91,13 @@
             <artifactId>commons-dbcp2</artifactId>
             <version>2.14.0</version>
         </dependency>
+        <!-- Override the transitive version to include security fixes. -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.21.0</version>
+        </dependency>
+        <!--suppress VulnerableLibrariesLocal -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -100,12 +106,12 @@
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>6.2.5.Final</version>
+            <version>6.2.6.Final</version>
         </dependency>
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <version>26.7.0</version>
+            <version>26.10.0</version>
         </dependency>
 
         <dependency>
