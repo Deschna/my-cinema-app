@@ -7,6 +7,8 @@ import cinema.service.MovieSessionService;
 import cinema.service.mapper.RequestDtoMapper;
 import cinema.service.mapper.ResponseDtoMapper;
 import cinema.util.DateTimePatternUtil;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.List;
 import javax.validation.Valid;
@@ -54,6 +56,8 @@ public class MovieSessionController {
     public List<MovieSessionResponseDto> findAvailableSessions(
             @RequestParam @Positive Long movieId,
             @RequestParam
+            @Parameter(description = "Date in " + DateTimePatternUtil.DATE_PATTERN + " format",
+                    schema = @Schema(implementation = String.class))
             @DateTimeFormat(pattern = DateTimePatternUtil.DATE_PATTERN)
             LocalDate date) {
         return movieSessionService.findAvailableSessions(movieId, date)

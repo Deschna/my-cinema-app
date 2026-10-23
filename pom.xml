@@ -29,11 +29,11 @@
 
     <dependencies>
         <!--
-            Spring 5.3 and Spring Security 5.8 are the latest stable versions compatible
-            with the project's Javax stack (Servlet 4 / Tomcat 9). Newer versions require
-            migrating the project to Jakarta APIs and Tomcat 10+.
-            The targeted IntelliJ suppressions acknowledge CVEs remaining in the retained
-            versions without hiding vulnerability findings for other dependencies.
+            Spring 5.3, Spring Security 5.8 and springdoc 1.8 are the last open-source
+            release lines compatible with the project's javax stack (Servlet 4 / Tomcat 9).
+            Newer release lines require migrating to Jakarta APIs and Tomcat 10+.
+            The targeted IntelliJ suppressions acknowledge known CVE warnings
+            without hiding findings for other dependencies.
         -->
         <!--suppress VulnerableLibrariesLocal -->
         <dependency>
@@ -78,6 +78,13 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
             <version>${spring.security.version}</version>
+        </dependency>
+
+        <!--suppress VulnerableLibrariesLocal -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.8.0</version>
         </dependency>
 
         <dependency>

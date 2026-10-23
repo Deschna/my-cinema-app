@@ -5,6 +5,7 @@ import cinema.dto.response.UserResponseDto;
 import cinema.model.User;
 import cinema.service.AuthenticationService;
 import cinema.service.mapper.ResponseDtoMapper;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import javax.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
+    // Empty requirements remove Swagger's global authentication requirement for registration.
+    @SecurityRequirements
     public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto requestDto) {
         User user = authService.register(requestDto.getEmail(), requestDto.getPassword());
         return userDtoResponseMapper.mapToDto(user);

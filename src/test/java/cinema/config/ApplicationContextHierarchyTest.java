@@ -31,6 +31,7 @@ class ApplicationContextHierarchyTest {
             "cinema.controller."
     );
     private static final Set<String> SERVLET_CLASSES_OUTSIDE_SCANNED_PACKAGES = Set.of(
+            OpenApiConfig.class.getName(),
             WebConfig.class.getName()
     );
 
