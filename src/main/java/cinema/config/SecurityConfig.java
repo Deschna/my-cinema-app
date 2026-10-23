@@ -10,7 +10,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -30,6 +29,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // Use explicit Ant matchers because MVC is configured in a separate child context.
         http.authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(
+                                antMatcher(HttpMethod.GET, "/swagger-ui.html"),
+                                antMatcher(HttpMethod.GET, "/swagger-ui/**"),
+                                antMatcher(HttpMethod.GET, "/v3/api-docs/**"),
+                                antMatcher(HttpMethod.HEAD, "/swagger-ui.html"),
+                                antMatcher(HttpMethod.HEAD, "/swagger-ui/**"),
+                                antMatcher(HttpMethod.HEAD, "/v3/api-docs/**")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.POST, "/register")).permitAll()
                         .requestMatchers(
                                 antMatcher(HttpMethod.GET, "/movies"),
@@ -68,7 +74,9 @@ public class SecurityConfig {
                                 antMatcher(HttpMethod.PUT, "/shopping-carts/movie-sessions"))
                         .hasRole("USER")
                         .anyRequest().denyAll())
-                .formLogin(FormLoginConfigurer::permitAll)
+                .formLogin(form -> form
+                        .defaultSuccessUrl("/swagger-ui.html", true)
+                        .permitAll())
                 .httpBasic(basic -> basic.authenticationEntryPoint(authenticationEntryPoint))
                 .exceptionHandling(exceptions -> exceptions
                         .accessDeniedHandler(accessDeniedHandler))
