@@ -1,6 +1,7 @@
 package cinema.controller;
 
 import cinema.dto.request.UserRegistrationRequestDto;
+import cinema.dto.response.CurrentUserResponseDto;
 import cinema.dto.response.UserResponseDto;
 import cinema.model.User;
 import cinema.service.AuthenticationService;
@@ -8,6 +9,9 @@ import cinema.service.mapper.ResponseDtoMapper;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import javax.validation.Valid;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,5 +35,14 @@ public class AuthenticationController {
     public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto requestDto) {
         User user = authService.register(requestDto.getEmail(), requestDto.getPassword());
         return userDtoResponseMapper.mapToDto(user);
+    }
+
+    @GetMapping("/me")
+    public CurrentUserResponseDto me(Authentication authentication) {
+        return new CurrentUserResponseDto(authentication.getName(),
+                authentication.getAuthorities().stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .sorted()
+                        .toList());
     }
 }
