@@ -32,8 +32,10 @@ public class JsonAuthenticationEntryPoint implements AuthenticationEntryPoint {
                     ApiErrorCode.INTERNAL_ERROR, "An unexpected error occurred");
             return;
         }
-        // Tell the client to authenticate using HTTP Basic.
-        response.setHeader(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"Realm\"");
+        // Avoid the browser's Basic dialog; use Fetch Metadata as a browser hint.
+        if (request.getHeader("Sec-Fetch-Mode") == null) {
+            response.setHeader(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"Realm\"");
+        }
         responseWriter.write(request, response, HttpStatus.UNAUTHORIZED,
                 ApiErrorCode.AUTHENTICATION_REQUIRED, "Authentication is required");
     }
