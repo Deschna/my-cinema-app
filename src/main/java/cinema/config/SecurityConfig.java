@@ -38,6 +38,10 @@ public class SecurityConfig {
                                 antMatcher(HttpMethod.HEAD, "/v3/api-docs/**")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.POST, "/register")).permitAll()
                         .requestMatchers(
+                                antMatcher(HttpMethod.GET, "/me"),
+                                antMatcher(HttpMethod.HEAD, "/me"))
+                        .authenticated()
+                        .requestMatchers(
                                 antMatcher(HttpMethod.GET, "/movies"),
                                 antMatcher(HttpMethod.GET, "/cinema-halls"),
                                 antMatcher(HttpMethod.GET, "/movie-sessions/available"))
