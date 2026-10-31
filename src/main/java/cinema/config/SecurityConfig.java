@@ -77,6 +77,9 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .defaultSuccessUrl("/swagger-ui.html", true)
                         .permitAll())
+                // Keep Spring's GET confirmation page even while CSRF is disabled.
+                .logout(logout -> logout
+                        .logoutRequestMatcher(antMatcher(HttpMethod.POST, "/logout")))
                 .httpBasic(basic -> basic.authenticationEntryPoint(authenticationEntryPoint))
                 .exceptionHandling(exceptions -> exceptions
                         .accessDeniedHandler(accessDeniedHandler))
