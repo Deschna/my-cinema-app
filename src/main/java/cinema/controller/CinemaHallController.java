@@ -6,6 +6,8 @@ import cinema.model.CinemaHall;
 import cinema.service.CinemaHallService;
 import cinema.service.mapper.RequestDtoMapper;
 import cinema.service.mapper.ResponseDtoMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.http.MediaType;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "Cinema halls")
 @RequestMapping(value = "/cinema-halls", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CinemaHallController {
     private final CinemaHallService cinemaHallService;
@@ -31,6 +34,7 @@ public class CinemaHallController {
     }
 
     @PostMapping
+    @Operation(summary = "Add a cinema hall (ADMIN)")
     public CinemaHallResponseDto add(@RequestBody @Valid CinemaHallRequestDto requestDto) {
         CinemaHall cinemaHall = cinemaHallService.add(
                 cinemaHallRequestDtoMapper.mapToModel(requestDto));
@@ -38,6 +42,7 @@ public class CinemaHallController {
     }
 
     @GetMapping
+    @Operation(summary = "List cinema halls (USER / ADMIN)")
     public List<CinemaHallResponseDto> getAll() {
         return cinemaHallService.getAll()
                 .stream()

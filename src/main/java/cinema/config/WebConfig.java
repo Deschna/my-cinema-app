@@ -10,13 +10,38 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "cinema.controller")
 @Import(OpenApiConfig.class)
 public class WebConfig implements WebMvcConfigurer {
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addRedirectViewController("/", "/swagger-ui.html");
+        registry.addViewController("/login").setViewName("security/login");
+        registry.addViewController("/logout").setViewName("security/logout");
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/ui/css/**")
+                .addResourceLocations("/WEB-INF/ui/css/");
+    }
+
+    @Bean
+    public InternalResourceViewResolver securityViewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        resolver.setPrefix("/WEB-INF/ui/");
+        resolver.setSuffix(".jsp");
+        resolver.setViewNames("security/*");
+        return resolver;
+    }
+
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
         // Match the exact paths used by the Security rules, without an optional trailing slash.

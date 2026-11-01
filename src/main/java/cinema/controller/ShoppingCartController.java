@@ -8,6 +8,9 @@ import cinema.service.MovieSessionService;
 import cinema.service.ShoppingCartService;
 import cinema.service.UserService;
 import cinema.service.mapper.ResponseDtoMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.constraints.Positive;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "Shopping cart")
 @RequestMapping(value = "/shopping-carts", produces = MediaType.APPLICATION_JSON_VALUE)
 @Validated
 public class ShoppingCartController {
@@ -41,8 +45,12 @@ public class ShoppingCartController {
     }
 
     @PutMapping("/movie-sessions")
-    public void addToCart(Authentication auth,
-                          @RequestParam @Positive Long movieSessionId) {
+    @Operation(summary = "Add a ticket to my cart (USER)")
+    public void addToCart(@Parameter(hidden = true) Authentication auth,
+                          @RequestParam @Positive
+                          @Parameter(description = "Movie session ID from "
+                                  + "GET /movie-sessions/available", example = "1")
+                          Long movieSessionId) {
         UserDetails details = (UserDetails) auth.getPrincipal();
         String email = details.getUsername();
         User user = userService.findByEmail(email).orElseThrow(
@@ -52,7 +60,8 @@ public class ShoppingCartController {
     }
 
     @GetMapping("/by-user")
-    public ShoppingCartResponseDto getByUser(Authentication auth) {
+    @Operation(summary = "View my cart (USER)")
+    public ShoppingCartResponseDto getByUser(@Parameter(hidden = true) Authentication auth) {
         UserDetails details = (UserDetails) auth.getPrincipal();
         String email = details.getUsername();
         User user = userService.findByEmail(email).orElseThrow(

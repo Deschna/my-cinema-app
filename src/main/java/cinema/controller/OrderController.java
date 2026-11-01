@@ -8,6 +8,9 @@ import cinema.service.OrderService;
 import cinema.service.ShoppingCartService;
 import cinema.service.UserService;
 import cinema.service.mapper.ResponseDtoMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "Orders")
 @RequestMapping(value = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderController {
     private final ShoppingCartService shoppingCartService;
@@ -35,7 +39,8 @@ public class OrderController {
     }
 
     @PostMapping("/complete")
-    public OrderResponseDto completeOrder(Authentication auth) {
+    @Operation(summary = "Place an order from my cart (USER)")
+    public OrderResponseDto completeOrder(@Parameter(hidden = true) Authentication auth) {
         String email = auth.getName();
         User user = userService.findByEmail(email).orElseThrow(
                 () -> new RuntimeException("User with email " + email + " not found"));
@@ -44,7 +49,8 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<OrderResponseDto> getOrderHistory(Authentication auth) {
+    @Operation(summary = "View my order history (USER)")
+    public List<OrderResponseDto> getOrderHistory(@Parameter(hidden = true) Authentication auth) {
         String email = auth.getName();
         User user = userService.findByEmail(email).orElseThrow(
                 () -> new RuntimeException("User with email " + email + " not found"));
