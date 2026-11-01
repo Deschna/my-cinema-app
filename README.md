@@ -20,6 +20,9 @@ This project is intended for local demonstration only.
 REST controller request and response bodies use JSON. MVC error bodies share
 a consistent format without exposing internal exception details.
 
+This project focuses on backend development. The demo UI was generated entirely
+by OpenAI Codex using Swagger UI.
+
 ## Getting Started
 - Clone this repository: `git clone https://github.com/Deschna/my-cinema-app.git`
 - Create a MySQL database and configure `config/db.properties`; to use another file, set

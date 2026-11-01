@@ -1,0 +1,463 @@
+/*
+ * Overrides target Swagger UI 5.11.8; recheck selectors and icons when upgrading.
+ */
+
+/* Keep live responses, not the static reference generated from the response schema. */
+.swagger-ui .responses-wrapper:not(:has(.live-responses-table)),
+.swagger-ui .responses-wrapper > .opblock-section-header,
+.swagger-ui .responses-inner > .responses-table,
+.swagger-ui .responses-inner > div > h4 {
+    display: none;
+}
+
+.swagger-ui .info .title small,
+.swagger-ui .info .main > a {
+    display: none;
+}
+
+:root {
+    color-scheme: dark;
+    --cinema-page: #141414;
+    --cinema-surface: #1d1d1d;
+    --cinema-raised: #292929;
+    --cinema-control: #181818;
+    --cinema-border: #686868;
+    --cinema-text: #dedede;
+    --cinema-muted: #b0b0b0;
+    --cinema-bright: #f2f2f2;
+}
+
+body {
+    background-color: var(--cinema-page);
+    color: var(--cinema-text);
+}
+
+.swagger-ui {
+    color: var(--cinema-text);
+    accent-color: var(--cinema-muted);
+}
+
+.swagger-ui .info .title,
+.swagger-ui .info h1,
+.swagger-ui .info h2,
+.swagger-ui .info h3,
+.swagger-ui .info h4,
+.swagger-ui .info h5,
+.swagger-ui .info p,
+.swagger-ui .info li,
+.swagger-ui .info table,
+.swagger-ui .info .base-url,
+.swagger-ui .opblock-tag,
+.swagger-ui .opblock-tag small,
+.swagger-ui .opblock .opblock-summary-path,
+.swagger-ui .opblock .opblock-summary-operation-id,
+.swagger-ui .opblock .opblock-summary-path__deprecated,
+.swagger-ui .opblock-description-wrapper,
+.swagger-ui .opblock-description-wrapper h4,
+.swagger-ui .opblock-description-wrapper p,
+.swagger-ui .opblock-external-docs-wrapper,
+.swagger-ui .opblock-external-docs-wrapper h4,
+.swagger-ui .opblock-external-docs-wrapper p,
+.swagger-ui .opblock-title_normal,
+.swagger-ui .opblock-title_normal h4,
+.swagger-ui .opblock-title_normal p,
+.swagger-ui .opblock .opblock-section-header h4,
+.swagger-ui .opblock .opblock-section-header label,
+.swagger-ui .responses-inner h4,
+.swagger-ui .responses-inner h5,
+.swagger-ui .response-col_status,
+.swagger-ui .response-col_links,
+.swagger-ui .tab li,
+.swagger-ui label,
+.swagger-ui .parameter__name,
+.swagger-ui .parameter__type,
+.swagger-ui .model,
+.swagger-ui .model-title,
+.swagger-ui section.models h4,
+.swagger-ui section.models h5,
+.swagger-ui table.headers td,
+.swagger-ui table thead tr th,
+.swagger-ui table thead tr td,
+.swagger-ui .checkbox,
+.swagger-ui .checkbox p,
+.swagger-ui .servers > label,
+.swagger-ui .scheme-container .schemes > .schemes-server-container > label,
+.swagger-ui section h3,
+.swagger-ui .scopes h2,
+.swagger-ui .errors-wrapper .errors h4,
+.swagger-ui .markdown pre,
+.swagger-ui .renderedMarkdown pre,
+.swagger-ui .dialog-ux .modal-ux-header h3,
+.swagger-ui .dialog-ux .modal-ux-content h4,
+.swagger-ui .dialog-ux .modal-ux-content p,
+.swagger-ui .loading-container .loading::after {
+    color: var(--cinema-text);
+}
+
+.swagger-ui a,
+.swagger-ui .info a {
+    color: var(--cinema-text);
+}
+
+.swagger-ui a:hover,
+.swagger-ui .info a:hover,
+.swagger-ui .parameter__name.required span,
+.swagger-ui .parameter__name.required::after,
+.swagger-ui table.model tr.property-row .star {
+    color: var(--cinema-bright);
+}
+
+.swagger-ui .parameter__in,
+.swagger-ui .parameter__extension,
+.swagger-ui .parameter__deprecated,
+.swagger-ui .response__extension,
+.swagger-ui .response-col_status .response-undocumented,
+.swagger-ui .response-col_links .response-undocumented,
+.swagger-ui .model .property,
+.swagger-ui .model .property.primitive,
+.swagger-ui .model .external-docs,
+.swagger-ui table.model tr.description,
+.swagger-ui table.model tr.extension,
+.swagger-ui table.headers .header-example,
+.swagger-ui .response-control-media-type__accept-message,
+.swagger-ui .model-deprecated-warning {
+    color: var(--cinema-muted);
+}
+
+.swagger-ui .prop-type,
+.swagger-ui .prop-format,
+.swagger-ui span.token-string,
+.swagger-ui span.token-not-formatted,
+.swagger-ui .errors-wrapper .errors small {
+    color: var(--cinema-muted);
+}
+
+.swagger-ui .markdown code,
+.swagger-ui .renderedMarkdown code {
+    background-color: var(--cinema-raised);
+    color: var(--cinema-text);
+}
+
+.swagger-ui .scheme-container,
+.swagger-ui .dialog-ux .modal-ux,
+.swagger-ui .opblock[class] {
+    background-color: var(--cinema-surface);
+    border-color: var(--cinema-border);
+}
+
+.swagger-ui .opblock {
+    --cinema-method: #525252;
+}
+
+.swagger-ui .opblock-get {
+    --cinema-method: #484848;
+}
+
+.swagger-ui .opblock-post {
+    --cinema-method: #525252;
+}
+
+.swagger-ui .opblock-put {
+    --cinema-method: #5c5c5c;
+}
+
+.swagger-ui .opblock-delete {
+    --cinema-method: #666666;
+}
+
+.swagger-ui .opblock[class] .opblock-summary {
+    border-color: var(--cinema-border);
+}
+
+.swagger-ui .opblock .opblock-summary-path-description-wrapper {
+    min-width: 0;
+    gap: 6px 12px;
+}
+
+.swagger-ui .opblock .opblock-summary-description {
+    border-inline-start: 1px solid var(--cinema-border);
+    padding-inline-start: 12px;
+    color: var(--cinema-muted);
+}
+
+/* Swagger stacks the description below the path at this breakpoint. */
+@media (max-width: 550px) {
+    .swagger-ui .opblock .opblock-summary-description {
+        border-inline-start: 0;
+        padding-inline-start: 0;
+    }
+}
+
+.swagger-ui .opblock[class] .opblock-summary-method {
+    background-color: var(--cinema-method);
+    color: var(--cinema-bright);
+}
+
+.swagger-ui .opblock[class] .tab-header .tab-item.active h4 span::after {
+    background-color: var(--cinema-muted);
+}
+
+.swagger-ui .opblock .opblock-section-header,
+.swagger-ui .model-box,
+.swagger-ui section.models .model-container,
+.swagger-ui .auth-container .errors,
+.swagger-ui .errors-wrapper {
+    background-color: var(--cinema-raised);
+    color: var(--cinema-text);
+}
+
+.swagger-ui .opblock-tag:hover,
+.swagger-ui section.models h4:hover,
+.swagger-ui section.models .model-container:hover {
+    background-color: var(--cinema-raised);
+}
+
+.swagger-ui .opblock-tag,
+.swagger-ui section.models,
+.swagger-ui section.models h4,
+.swagger-ui .auth-container,
+.swagger-ui .dialog-ux .modal-ux-header,
+.swagger-ui table thead tr th,
+.swagger-ui table thead tr td,
+.swagger-ui .errors-wrapper {
+    border-color: var(--cinema-border);
+}
+
+.swagger-ui input[type="email"],
+.swagger-ui input[type="file"],
+.swagger-ui input[type="password"],
+.swagger-ui input[type="search"],
+.swagger-ui input[type="text"],
+.swagger-ui textarea,
+.swagger-ui select,
+.swagger-ui select[multiple],
+.swagger-ui .response-control-media-type--accept-controller select,
+.swagger-ui .filter .operation-filter-input {
+    background-color: var(--cinema-control);
+    border-color: var(--cinema-border);
+    color: var(--cinema-text);
+}
+
+.swagger-ui input::placeholder,
+.swagger-ui textarea::placeholder {
+    color: var(--cinema-muted);
+}
+
+.swagger-ui select {
+    background-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 20 20\"><path fill=\"%23dedede\" d=\"M13.418 7.859a.695.695 0 0 1 .978 0 .68.68 0 0 1 0 .969l-3.908 3.83a.697.697 0 0 1-.979 0l-3.908-3.83a.68.68 0 0 1 0-.969.695.695 0 0 1 .978 0L10 11z\"/></svg>");
+}
+
+.swagger-ui select[multiple] {
+    background-image: none;
+}
+
+.swagger-ui .model-toggle::after {
+    background-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\"><path fill=\"%23dedede\" d=\"M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z\"/></svg>");
+}
+
+.swagger-ui .checkbox input[type="checkbox"] + label > .item {
+    background-color: var(--cinema-text);
+    box-shadow: 0 0 0 2px var(--cinema-text);
+}
+
+.swagger-ui .checkbox input[type="checkbox"]:checked + label > .item {
+    background-color: var(--cinema-text);
+    background-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"10\" height=\"8\" viewBox=\"3 7 10 8\"><path fill=\"%23181818\" fill-rule=\"evenodd\" d=\"M6.333 15 3 11.667l1.333-1.334 2 2L11.667 7 13 8.333z\"/></svg>");
+}
+
+.swagger-ui input[type].invalid,
+.swagger-ui textarea.invalid,
+.swagger-ui select.invalid {
+    background-color: var(--cinema-raised);
+    border-color: var(--cinema-bright);
+}
+
+.swagger-ui input[disabled],
+.swagger-ui textarea[disabled],
+.swagger-ui select[disabled] {
+    background-color: var(--cinema-raised);
+    border-color: var(--cinema-border);
+    color: var(--cinema-muted);
+}
+
+.swagger-ui input:focus,
+.swagger-ui textarea:focus,
+.swagger-ui select:focus,
+.swagger-ui button:focus-visible,
+.swagger-ui a:focus-visible {
+    border-color: var(--cinema-bright);
+    outline-color: var(--cinema-bright);
+}
+
+.swagger-ui .btn,
+.swagger-ui .btn.cancel,
+.swagger-ui .btn.authorize {
+    background-color: var(--cinema-raised);
+    border-color: var(--cinema-muted);
+    color: var(--cinema-text);
+}
+
+.swagger-ui .btn.execute {
+    background-color: var(--cinema-text);
+    border-color: var(--cinema-text);
+    color: var(--cinema-control);
+}
+
+.swagger-ui .btn:hover {
+    border-color: var(--cinema-bright);
+}
+
+.swagger-ui .btn.execute:hover {
+    background-color: var(--cinema-bright);
+}
+
+.swagger-ui svg,
+.swagger-ui .btn.authorize svg {
+    fill: currentColor;
+}
+
+.swagger-ui svg [fill]:not([fill="none"]) {
+    fill: currentColor;
+}
+
+.swagger-ui svg [stroke]:not([stroke="none"]) {
+    stroke: currentColor;
+}
+
+.swagger-ui .opblock-body pre.microlight,
+.swagger-ui .highlight-code,
+.swagger-ui textarea.curl {
+    background-color: var(--cinema-control);
+    color: var(--cinema-text);
+}
+
+/* The syntax highlighter supplies inline colors. */
+.swagger-ui .highlight-code > pre,
+.swagger-ui .highlight-code > pre span {
+    background-color: transparent !important;
+    color: var(--cinema-text) !important;
+}
+
+.swagger-ui .copy-to-clipboard,
+.swagger-ui .download-contents,
+.swagger-ui .model-hint {
+    background-color: #525252;
+    color: var(--cinema-bright);
+}
+
+.swagger-ui .copy-to-clipboard:active,
+.swagger-ui .tab li:first-of-type::after {
+    background-color: var(--cinema-border);
+}
+
+.swagger-ui .auth-container div:has(> label[for="auth-basic-username"]) {
+    margin-top: 12px;
+}
+
+.swagger-ui .dialog-ux .backdrop-ux {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.swagger-ui .loading-container .loading::before {
+    border-color: var(--cinema-border);
+    border-top-color: var(--cinema-bright);
+}
+
+.swagger-ui .download-url-wrapper .failed,
+.swagger-ui .filter .failed,
+.swagger-ui .errors-wrapper hgroup h4 {
+    color: var(--cinema-bright);
+}
+
+.security-page {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 40px 24px;
+    min-height: 100vh;
+    display: grid;
+    place-items: start center;
+    font-family: sans-serif;
+}
+
+.security-card {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 400px;
+    padding: 32px;
+    background-color: var(--cinema-surface);
+    border: 1px solid var(--cinema-border);
+    border-radius: 6px;
+}
+
+.security-card h1 {
+    margin: 0 0 8px;
+    font-size: 32px;
+}
+
+.security-card h2 {
+    margin: 0 0 24px;
+    color: var(--cinema-muted);
+    font-size: 18px;
+    font-weight: normal;
+}
+
+.security-card p {
+    line-height: 1.5;
+}
+
+.security-notice {
+    padding: 12px;
+    background-color: var(--cinema-raised);
+    border: 1px solid var(--cinema-border);
+    border-radius: 4px;
+}
+
+.security-card label {
+    display: block;
+    margin: 16px 0 6px;
+    font-size: 14px;
+}
+
+.security-card input,
+.security-card button {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--cinema-border);
+    border-radius: 4px;
+    font: inherit;
+}
+
+.security-card input {
+    background-color: var(--cinema-control);
+    color: var(--cinema-text);
+}
+
+.security-card button {
+    margin-top: 24px;
+    background-color: var(--cinema-text);
+    color: var(--cinema-control);
+    cursor: pointer;
+}
+
+.security-card button:hover {
+    background-color: var(--cinema-bright);
+}
+
+.security-link {
+    display: block;
+    margin-top: 24px;
+    color: var(--cinema-muted);
+    text-align: center;
+}
+
+.security-link:hover {
+    color: var(--cinema-bright);
+}
+
+.security-card input:focus-visible,
+.security-card button:focus-visible,
+.security-link:focus-visible {
+    outline: 2px solid var(--cinema-bright);
+    outline-offset: 2px;
+}

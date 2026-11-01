@@ -6,6 +6,8 @@ import cinema.model.Movie;
 import cinema.service.MovieService;
 import cinema.service.mapper.RequestDtoMapper;
 import cinema.service.mapper.ResponseDtoMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.http.MediaType;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "Movies")
 @RequestMapping(value = "/movies", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MovieController {
     private final MovieService movieService;
@@ -31,12 +34,14 @@ public class MovieController {
     }
 
     @PostMapping
+    @Operation(summary = "Add a movie (ADMIN)")
     public MovieResponseDto add(@RequestBody @Valid MovieRequestDto requestDto) {
         Movie movie = movieService.add(movieRequestDtoMapper.mapToModel(requestDto));
         return movieResponseDtoMapper.mapToDto(movie);
     }
 
     @GetMapping
+    @Operation(summary = "List movies (USER / ADMIN)")
     public List<MovieResponseDto> getAll() {
         return movieService.getAll()
                 .stream()

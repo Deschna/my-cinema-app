@@ -33,11 +33,17 @@ public class SecurityConfig {
                                 antMatcher(HttpMethod.GET, "/swagger-ui.html"),
                                 antMatcher(HttpMethod.GET, "/swagger-ui/**"),
                                 antMatcher(HttpMethod.GET, "/v3/api-docs/**"),
+                                antMatcher(HttpMethod.GET, "/ui/css/**"),
+                                antMatcher(HttpMethod.GET, "/logout"),
                                 antMatcher(HttpMethod.HEAD, "/swagger-ui.html"),
                                 antMatcher(HttpMethod.HEAD, "/swagger-ui/**"),
-                                antMatcher(HttpMethod.HEAD, "/v3/api-docs/**")).permitAll()
+                                antMatcher(HttpMethod.HEAD, "/v3/api-docs/**"),
+                                antMatcher(HttpMethod.HEAD, "/ui/css/**"),
+                                antMatcher(HttpMethod.HEAD, "/logout")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.POST, "/register")).permitAll()
                         .requestMatchers(
+                                antMatcher(HttpMethod.GET, "/"),
+                                antMatcher(HttpMethod.HEAD, "/"),
                                 antMatcher(HttpMethod.GET, "/me"),
                                 antMatcher(HttpMethod.HEAD, "/me"))
                         .authenticated()
@@ -79,11 +85,14 @@ public class SecurityConfig {
                         .hasRole("USER")
                         .anyRequest().denyAll())
                 .formLogin(form -> form
+                        .loginPage("/login")
                         .defaultSuccessUrl("/swagger-ui.html", true)
                         .permitAll())
-                // Keep Spring's GET confirmation page even while CSRF is disabled.
+                // GET shows the confirmation page; only POST ends the session.
                 .logout(logout -> logout
-                        .logoutRequestMatcher(antMatcher(HttpMethod.POST, "/logout")))
+                        .logoutRequestMatcher(antMatcher(HttpMethod.POST, "/logout"))
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll())
                 .httpBasic(basic -> basic.authenticationEntryPoint(authenticationEntryPoint))
                 .exceptionHandling(exceptions -> exceptions
                         .accessDeniedHandler(accessDeniedHandler))

@@ -6,7 +6,10 @@ import cinema.dto.response.UserResponseDto;
 import cinema.model.User;
 import cinema.service.AuthenticationService;
 import cinema.service.mapper.ResponseDtoMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "Authentication")
 public class AuthenticationController {
     private final AuthenticationService authService;
     private final ResponseDtoMapper<UserResponseDto, User> userDtoResponseMapper;
@@ -30,6 +34,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Register a user",
+            description = "Creates a USER account; sign in afterwards.")
     // Empty requirements remove Swagger's global authentication requirement for registration.
     @SecurityRequirements
     public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto requestDto) {
@@ -38,7 +44,8 @@ public class AuthenticationController {
     }
 
     @GetMapping("/me")
-    public CurrentUserResponseDto me(Authentication authentication) {
+    @Operation(summary = "View my account and roles")
+    public CurrentUserResponseDto me(@Parameter(hidden = true) Authentication authentication) {
         return new CurrentUserResponseDto(authentication.getName(),
                 authentication.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
